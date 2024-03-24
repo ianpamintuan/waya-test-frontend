@@ -16,3 +16,10 @@ export const fetchRequest = async (url: string) => {
 
   return data;
 };
+
+export const formatDate = (str: string) =>
+  new Date(str).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });

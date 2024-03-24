@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { InvoiceResponseData } from "./types";
-import { fetchRequest } from "./util";
+import { fetchRequest, formatDate } from "./util";
 import Spinner from "./components/Spinner/Spinner";
+import { ViewModal } from "./components/ViewModal";
 
 function App() {
   const [invoicesList, setInvoicesList] = useState<InvoiceResponseData | null>(
     null
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState<number | null>(null);
+  const [openViewModal, setOpenViewModal] = useState(false);
 
   const fetchInvoices = async () => {
     setIsLoading(true);
@@ -72,14 +75,7 @@ function App() {
                         {invoice.id}
                       </td>
                       <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                        {new Date(invoice.invoice_date).toLocaleDateString(
-                          "en-US",
-                          {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          }
-                        )}
+                        {formatDate(invoice.invoice_date)}
                       </td>
                       <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                         {invoice.customer_name}
@@ -92,12 +88,17 @@ function App() {
                         <button
                           type="button"
                           className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                          onClick={() => {
+                            setSelectedInvoice(invoice.id);
+                            setOpenViewModal(true);
+                          }}
                         >
                           View
                         </button>
                         <button
                           type="button"
                           className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                          onClick={() => setSelectedInvoice(invoice.id)}
                         >
                           Edit
                         </button>
@@ -183,6 +184,14 @@ function App() {
             )}
           </div>
         </div>
+      )}
+
+      {selectedInvoice && (
+        <ViewModal
+          selectedId={selectedInvoice}
+          open={openViewModal}
+          onClose={() => setOpenViewModal(false)}
+        />
       )}
     </>
   );
