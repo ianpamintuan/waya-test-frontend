@@ -50,19 +50,22 @@ function App() {
               <table className="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
                 <thead>
                   <tr>
-                    <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-left">
+                    <th className="whitespace-nowrap p-2 font-medium text-gray-900 text-left">
                       Invoice #
                     </th>
-                    <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-left">
+                    <th className="whitespace-nowrap p-2 font-medium text-gray-900 text-left">
                       Invoice Date
                     </th>
-                    <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-left">
+                    <th className="whitespace-nowrap p-2 font-medium text-gray-900 text-left">
+                      Due Date
+                    </th>
+                    <th className="whitespace-nowrap p-2 font-medium text-gray-900 text-left">
                       Customer Name
                     </th>
-                    <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-left">
+                    <th className="whitespace-nowrap p-2 font-medium text-gray-900 text-left">
                       Customer Address
                     </th>
-                    <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-left">
+                    <th className="whitespace-nowrap p-2 py-2 font-medium text-gray-900 text-left">
                       Actions
                     </th>
                   </tr>
@@ -71,20 +74,23 @@ function App() {
                 <tbody className="divide-y divide-gray-200">
                   {invoicesList?.data?.map((invoice) => (
                     <tr key={invoice.id}>
-                      <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                      <td className="whitespace-nowrap p-2 font-medium text-gray-900">
                         {invoice.id}
                       </td>
-                      <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                      <td className="whitespace-nowrap p-2 text-gray-700">
                         {formatDate(invoice.invoice_date)}
                       </td>
-                      <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                      <td className="whitespace-nowrap p-2 text-gray-700">
+                        {formatDate(invoice.due_date)}
+                      </td>
+                      <td className="whitespace-nowrap p-2 text-gray-700">
                         {invoice.customer_name}
                       </td>
-                      <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                      <td className="whitespace-nowrap p-2 text-gray-700">
                         {invoice.customer_address}, {invoice.customer_city},{" "}
                         {invoice.customer_country}
                       </td>
-                      <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                      <td className="whitespace-nowrap p-2 text-gray-700">
                         <button
                           type="button"
                           className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
