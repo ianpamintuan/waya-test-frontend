@@ -5,6 +5,9 @@ import Spinner from "./components/Spinner/Spinner";
 import { ViewModal } from "./components/ViewModal";
 import { EditModal } from "./components/EditModal";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   const [invoicesList, setInvoicesList] = useState<InvoiceResponseData | null>(
     null
@@ -23,6 +26,12 @@ function App() {
     }
 
     setIsLoading(false);
+  };
+
+  const onUpdateSuccess = () => {
+    setOpenEditModal(false);
+    toast("Invoice is successfully updated!", { type: "success" });
+    fetchInvoices();
   };
 
   useEffect(() => {
@@ -210,8 +219,11 @@ function App() {
           data={selectedInvoice}
           open={openEditModal}
           onClose={() => setOpenEditModal(false)}
+          onSuccess={onUpdateSuccess}
         />
       )}
+
+      <ToastContainer />
     </>
   );
 }

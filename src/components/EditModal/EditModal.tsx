@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { Modal, ModalProps } from "../Modal";
 import { Invoice } from "../../types";
@@ -8,6 +8,7 @@ import { fetchRequest } from "../../util";
 
 interface Props extends ModalProps {
   data: Invoice;
+  onSuccess: () => void;
 }
 
 interface FormInputs {
@@ -24,7 +25,9 @@ interface FormInputs {
   dueDate: string;
 }
 
-export const EditModal: React.FC<Props> = ({ data, ...props }) => {
+export const EditModal: React.FC<Props> = ({ data, onSuccess, ...props }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const formInstance = useForm<FormInputs>({
     defaultValues: {
       customerName: data?.customer_name,
@@ -40,12 +43,11 @@ export const EditModal: React.FC<Props> = ({ data, ...props }) => {
       deliveryCountry: data?.delivery_country,
     },
   });
-  const {
-    register,
-    handleSubmit,
-  } = formInstance;
+  const { register, handleSubmit } = formInstance;
 
   const onSubmit: SubmitHandler<FormInputs> = async (formData) => {
+    setIsLoading(true);
+
     const request = await fetchRequest(`invoices/${data.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -64,9 +66,12 @@ export const EditModal: React.FC<Props> = ({ data, ...props }) => {
       }),
     });
 
-    if (request) {
+    if (request?.data) {
       // Success here
+      onSuccess();
     }
+
+    setIsLoading(false);
   };
 
   return (
@@ -225,7 +230,17 @@ export const EditModal: React.FC<Props> = ({ data, ...props }) => {
                   />
                 </InputWrapper>
 
-                <input type="submit" />
+                <div className="col-span-6 sm:col-span-3" />
+
+                <div className="mt-2 col-span-6 sm:col-span-3 flex justify-center sm:justify-end">
+                  <button
+                    type="submit"
+                    className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                    disabled={isLoading}
+                  >
+                    Update
+                  </button>
+                </div>
               </form>
             </FormProvider>
           </div>
