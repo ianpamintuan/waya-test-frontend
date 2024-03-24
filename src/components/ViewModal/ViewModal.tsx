@@ -25,7 +25,6 @@ export const ViewModal: React.FC<Props> = ({ selectedId, ...props }) => {
   };
 
   useEffect(() => {
-    console.log("selectedId", selectedId);
     if (selectedId) {
       fetchInvoiceData(selectedId);
     }
@@ -61,8 +60,7 @@ export const ViewModal: React.FC<Props> = ({ selectedId, ...props }) => {
                 <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
                   <dt className="font-medium text-gray-900">Due Date</dt>
                   <dd className="text-gray-700 sm:col-span-2">
-                    {invoiceData?.due_date &&
-                      formatDate(invoiceData.due_date)}
+                    {invoiceData?.due_date && formatDate(invoiceData.due_date)}
                   </dd>
                 </div>
 
