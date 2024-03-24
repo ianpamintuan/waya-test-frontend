@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
-import { InvoiceResponseData } from "./types";
+import { Invoice, InvoiceResponseData } from "./types";
 import { fetchRequest, formatDate } from "./util";
 import Spinner from "./components/Spinner/Spinner";
 import { ViewModal } from "./components/ViewModal";
+import { EditModal } from "./components/EditModal";
 
 function App() {
   const [invoicesList, setInvoicesList] = useState<InvoiceResponseData | null>(
     null
   );
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedInvoice, setSelectedInvoice] = useState<number | null>(null);
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
   const [openViewModal, setOpenViewModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
 
   const fetchInvoices = async () => {
     setIsLoading(true);
@@ -95,7 +97,7 @@ function App() {
                           type="button"
                           className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                           onClick={() => {
-                            setSelectedInvoice(invoice.id);
+                            setSelectedInvoice(invoice);
                             setOpenViewModal(true);
                           }}
                         >
@@ -104,7 +106,10 @@ function App() {
                         <button
                           type="button"
                           className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-                          onClick={() => setSelectedInvoice(invoice.id)}
+                          onClick={() => {
+                            setSelectedInvoice(invoice);
+                            setOpenEditModal(true);
+                          }}
                         >
                           Edit
                         </button>
@@ -192,11 +197,19 @@ function App() {
         </div>
       )}
 
-      {selectedInvoice && (
+      {selectedInvoice && openViewModal && (
         <ViewModal
-          selectedId={selectedInvoice}
+          selectedId={selectedInvoice.id}
           open={openViewModal}
           onClose={() => setOpenViewModal(false)}
+        />
+      )}
+
+      {selectedInvoice && openEditModal && (
+        <EditModal
+          data={selectedInvoice}
+          open={openEditModal}
+          onClose={() => setOpenEditModal(false)}
         />
       )}
     </>
